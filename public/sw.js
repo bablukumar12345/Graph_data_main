@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿const CACHE_NAME = 'nd-quation-v1';
+const CACHE_NAME = 'nd-quation-v2';
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -7,12 +6,16 @@ const CORE_ASSETS = [
   '/img/logo.png',
   '/img/icon-192.png',
   '/img/icon-512.png',
+  '/img/maskable-192.png',
+  '/img/maskable-512.png',
   '/img/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(CORE_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -51,14 +54,3 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
-=======
-const CACHE_NAME = "graph-data-v1";
-
-self.addEventListener("install", (event) => {
-    console.log("Service Worker Installed");
-});
-
-self.addEventListener("fetch", (event) => {
-    event.respondWith(fetch(event.request));
-});
->>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a

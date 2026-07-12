@@ -4,10 +4,7 @@
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
 :root {
   --navy: #0b1e3d;
   --navy2: #173b70;
@@ -30,10 +27,7 @@ body {
   font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
 .runtime-error {
   max-width: 680px;
   margin: 40px auto;

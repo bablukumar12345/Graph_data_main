@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+=======
+import React, { useEffect, useMemo, useState } from 'react';
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
 import RoomCard from './components/RoomCard.jsx';
 import BillModal from './components/BillModal.jsx';
 import { makeRoom, makeWall } from './lib/constants';
@@ -26,8 +30,11 @@ const makeEmptyRoom = () => {
   };
 };
 
+<<<<<<< HEAD
 const SYNC_INTERVAL_MS = 10000;
 
+=======
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
 const blankQuote = (empty = false) => ({
   id: makeId(),
   name: '',
@@ -87,13 +94,17 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [confirmBox, setConfirmBox] = useState(null);
   const [notice, setNotice] = useState('');
+<<<<<<< HEAD
   const historyRef = useRef([]);
   const recentRef = useRef([]);
+=======
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
   const totals = useMemo(() => quoteTotals(quote.rooms), [quote.rooms]);
   const balance = totals.amount - (Number(quote.advance) || 0);
 
   useEffect(() => {
     const localHistory = getHistory().map(normalizeQuote).filter(hasMeaningfulData);
+<<<<<<< HEAD
     applyHistory(localHistory);
     const localRecent = getRecentDeleted().map(normalizeQuote).filter(hasMeaningfulData);
     applyRecent(localRecent);
@@ -104,6 +115,24 @@ export default function App() {
     syncFromSheet(localHistory).finally(() => setLoading(false));
     const timer = setInterval(() => syncFromSheet(), SYNC_INTERVAL_MS);
     return () => clearInterval(timer);
+=======
+    persistHistory(localHistory);
+    setHistoryState(localHistory);
+    const localRecent = getRecentDeleted().map(normalizeQuote).filter(hasMeaningfulData);
+    setRecentDeleted(localRecent);
+    setRecentState(localRecent);
+    const draft = localHistory.find((item) => String(item.id) === String(getDraftId()));
+    if (draft) setQuote(draft);
+    setLoading(true);
+    gsLoad().then((sheetItems) => {
+      if (!sheetItems.length) return;
+      const normalizedSheets = sheetItems.map(normalizeQuote).filter(hasMeaningfulData);
+      const merged = [...normalizedSheets, ...localHistory.filter((local) => !normalizedSheets.some((sheet) => sheet.id === local.id))]
+        .sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+      persistHistory(merged);
+      setHistoryState(merged);
+    }).finally(() => setLoading(false));
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
   }, []);
 
   useEffect(() => {
@@ -119,6 +148,7 @@ export default function App() {
     setQuote((current) => ({ ...current, ...patch }));
   }
 
+<<<<<<< HEAD
   function applyHistory(items) {
     const next = items.slice(0, 50);
     historyRef.current = next;
@@ -145,6 +175,8 @@ export default function App() {
     applyHistory(mergeSheetHistory(sheetItems, baseHistory));
   }
 
+=======
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
   function hasMeaningfulData(data) {
     return Boolean(
       data.name ||
@@ -170,11 +202,20 @@ export default function App() {
       return;
     }
     const saved = { ...quote, grandTotal: totals.amount, savedAt: new Date().toISOString() };
+<<<<<<< HEAD
     const nextHistory = [saved, ...historyRef.current.filter((item) => item.id !== saved.id)];
     applyHistory(nextHistory);
     setDraftId(saved.id);
     const synced = await gsSave(saved);
     if (showMessage) showNotice(synced ? 'Quote saved successfully!' : 'Local save ho gaya, Google Sheet sync fail. Internet check karo.');
+=======
+    const nextHistory = [saved, ...history.filter((item) => item.id !== saved.id)];
+    persistHistory(nextHistory);
+    setHistoryState(nextHistory);
+    setDraftId(saved.id);
+    await gsSave(saved);
+    if (showMessage) showNotice('Quote saved successfully!');
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
   }
 
   function loadQuote(item) {
@@ -196,8 +237,15 @@ export default function App() {
     askConfirm(`"${item.name || 'No Name'}" Remove from history ? It will remain in Recents.`, () => {
       const nextHistory = history.filter((q) => q.id !== id);
       const nextRecent = [{ ...item, deletedAt: new Date().toISOString() }, ...recent.filter((q) => q.id !== id)];
+<<<<<<< HEAD
       applyHistory(nextHistory);
       applyRecent(nextRecent);
+=======
+      setHistoryState(nextHistory);
+      persistHistory(nextHistory);
+      setRecentDeleted(nextRecent);
+      setRecentState(nextRecent);
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
       if (quote.id === id) {
         clearDraftId();
         setQuote(blankQuote(true));
@@ -212,8 +260,15 @@ export default function App() {
     delete restored.deletedAt;
     const nextHistory = [restored, ...history.filter((q) => q.id !== id)];
     const nextRecent = recent.filter((q) => q.id !== id);
+<<<<<<< HEAD
     applyHistory(nextHistory);
     applyRecent(nextRecent);
+=======
+    setHistoryState(nextHistory);
+    persistHistory(nextHistory);
+    setRecentDeleted(nextRecent);
+    setRecentState(nextRecent);
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
   }
 
   async function permanentDelete(id) {
@@ -221,9 +276,15 @@ export default function App() {
     if (!item) return;
     askConfirm(`"${item.name || 'No Name'}" Permanently delete?`, async () => {
       const nextRecent = recent.filter((q) => q.id !== id);
+<<<<<<< HEAD
       applyRecent(nextRecent);
       const deleted = await gsDelete(id);
       if (!deleted) showNotice('Local delete ho gaya, Google Sheet delete fail. Internet check karo.');
+=======
+      setRecentDeleted(nextRecent);
+      setRecentState(nextRecent);
+      await gsDelete(id);
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a
     });
   }
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿const CACHE_NAME = 'nd-quation-v1';
 const CORE_ASSETS = [
   '/',
@@ -50,3 +51,14 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+=======
+const CACHE_NAME = "graph-data-v1";
+
+self.addEventListener("install", (event) => {
+    console.log("Service Worker Installed");
+});
+
+self.addEventListener("fetch", (event) => {
+    event.respondWith(fetch(event.request));
+});
+>>>>>>> b150150e00a5aa01d2b932c93210da5b99133a3a

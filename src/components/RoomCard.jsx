@@ -1,13 +1,14 @@
 import React from 'react';
 import { Dropdown } from 'primereact/dropdown';
-import { PAPERS, ROOM_TYPES, makeWall } from '../lib/constants';
-import { formatWhole, money, roomTotals, wallAmount, wallSqft } from '../lib/calc';
+import { PAPERS, ROOM_TYPES, WALLPAPER_OPTIONS, makeWall } from '../lib/constants';
+import { formatWhole, isWallpaperRoom, money, roomTotals, wallAmount, wallSqft } from '../lib/calc';
 import WallGraph from './WallGraph.jsx';
 import { cleanNumericInput } from '../lib/numberInput';
 
 export default function RoomCard({ room, index, onChange, canDelete = false, onDelete }) {
   const walls = room.walls?.length ? room.walls : [];
   const totals = roomTotals(room);
+  const isWallpaper = isWallpaperRoom(room);
 
   function updateRoom(patch) {
     onChange({ ...room, ...patch });
@@ -42,6 +43,11 @@ export default function RoomCard({ room, index, onChange, canDelete = false, onD
           <div className="room-num">2</div>
           <Dropdown value={room.roomPaper} options={PAPERS} onChange={(e) => updateRoom({ roomPaper: e.value })} className="prime-dropdown paper-dropdown" />
         </div>
+        <div className="room-section-label paper-label">Wallpaper</div>
+        <div className="room-select-row paper-select-row">
+          <div className="room-num">3</div>
+          <Dropdown value={room.wallpaperOption || 'None'} options={WALLPAPER_OPTIONS} onChange={(e) => updateRoom({ wallpaperOption: e.value })} className="prime-dropdown paper-dropdown" />
+        </div>
       </div>
 
       <div className="room-body">
@@ -60,20 +66,54 @@ export default function RoomCard({ room, index, onChange, canDelete = false, onD
               </div>
             </div>
             <label className="pattern-field">Pattern Number<input type="text" placeholder="e.g. WP-2024" value={wall.patternNum} onChange={(e) => updateWall(wall.id, { ...wall, patternNum: e.target.value })} /></label>
-            <WallGraph wall={wall} onChange={(next) => updateWall(wall.id, next)} />
-            <div className="rate-row">
-              <label>Rate (Rs./sq ft)</label>
-              <input
-                type="text"
-                inputMode="decimal"
-                value={wall.rate}
-                onWheel={(e) => e.currentTarget.blur()}
-                onKeyDown={(e) => (e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.preventDefault()}
-                onChange={(e) => updateWall(wall.id, { ...wall, rate: cleanNumericInput(e.target.value) })}
-              />
-              <strong>{money(wallAmount(wall))}</strong>
-            </div>
-            <div className="sqft-pill">{formatWhole(wallSqft(wall))} sq ft</div>
+            {isWallpaper ? (
+              <>
+                <div className="room-section-label paper-label">Wallpaper Details</div>
+                <div className="wall-input-grid">
+                  <label>Quantity
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={wall.rollCount}
+                      onWheel={(e) => e.currentTarget.blur()}
+                      onKeyDown={(e) => (e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.preventDefault()}
+                      onChange={(e) => updateWall(wall.id, { ...wall, rollCount: cleanNumericInput(e.target.value) })}
+                    />
+                  </label>
+                  <label>Price per Roll
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={wall.rollPrice}
+                      onWheel={(e) => e.currentTarget.blur()}
+                      onKeyDown={(e) => (e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.preventDefault()}
+                      onChange={(e) => updateWall(wall.id, { ...wall, rollPrice: cleanNumericInput(e.target.value) })}
+                    />
+                  </label>
+                </div>
+                <div className="rate-row">
+                  <label>Total</label>
+                  <strong>{money(wallAmount(wall, true))}</strong>
+                </div>
+              </>
+            ) : (
+              <>
+                <WallGraph wall={wall} onChange={(next) => updateWall(wall.id, next)} />
+                <div className="rate-row">
+                  <label>Rate (Rs./sq ft)</label>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={wall.rate}
+                    onWheel={(e) => e.currentTarget.blur()}
+                    onKeyDown={(e) => (e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.preventDefault()}
+                    onChange={(e) => updateWall(wall.id, { ...wall, rate: cleanNumericInput(e.target.value) })}
+                  />
+                  <strong>{money(wallAmount(wall, false))}</strong>
+                </div>
+                <div className="sqft-pill">{formatWhole(wallSqft(wall, false))} sq ft</div>
+              </>
+            )}
           </div>
         ))}
 

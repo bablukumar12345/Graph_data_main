@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { formatWhole, money, quoteTotals, wallAmount, wallSqft } from '../lib/calc';
+import { formatWhole, isWallpaperRoom, money, quoteTotals, wallAmount, wallSqft } from '../lib/calc';
 import { createPdfFile, downloadFile } from '../lib/pdf';
 import GraphPreview from './GraphPreview.jsx';
 
@@ -119,20 +119,24 @@ export default function BillModal({ data, onClose }) {
             </div>
             <table className="bill-table">
               <thead>
-                <tr><th>Room</th><th>Wall</th><th>Paper</th><th>Pattern</th><th>Sq/Ft</th><th>Price (Per/Sqft)</th><th>Amount</th></tr>
+                <tr><th>Room</th><th>Wall</th><th>Paper</th><th>Pattern</th><th>Sq/Ft</th><th>Price (Per/Sqft)</th><th>Price (Per/Roll)</th><th>Amount</th></tr>
               </thead>
               <tbody>
-                {data.rooms.flatMap((room) => room.walls.map((wall, wallIndex) => (
-                  <tr key={wall.id}>
-                    <td>{room.category}</td>
-                    <td>Wall {wallIndex + 1}</td>
-                    <td>{room.roomPaper}</td>
-                    <td>{wall.patternNum || '-'}</td>
-                    <td>{formatWhole(wallSqft(wall))}</td>
-                    <td>{money(wall.rate)}</td>
-                    <td>{money(wallAmount(wall))}</td>
-                  </tr>
-                )))}
+                {data.rooms.flatMap((room) => {
+                  const isWallpaper = isWallpaperRoom(room);
+                  return room.walls.map((wall, wallIndex) => (
+                    <tr key={wall.id}>
+                      <td>{room.category}</td>
+                      <td>Wall {wallIndex + 1}</td>
+                      <td>{isWallpaper ? 'Wallpaper' : room.roomPaper}</td>
+                      <td>{wall.patternNum || 'NA'}</td>
+                      <td>{isWallpaper ? 'NA' : formatWhole(wallSqft(wall, false))}</td>
+                      <td>{isWallpaper ? 'NA' : money(wall.rate)}</td>
+                      <td>{isWallpaper ? money(wall.rollPrice) : 'NA'}</td>
+                      <td>{money(wallAmount(wall, isWallpaper))}</td>
+                    </tr>
+                  ));
+                })}
               </tbody>
             </table>
             <div className="bill-total">
@@ -143,9 +147,12 @@ export default function BillModal({ data, onClose }) {
             </div>
           </div>
           <div className="bill-graphs" ref={graphRef}>
-            {data.rooms.flatMap((room) => room.walls.map((wall, wallIndex) => (
-              <GraphPreview key={wall.id} roomName={room.category} wall={wall} wallIndex={wallIndex} />
-            )))}
+            {data.rooms.flatMap((room) => {
+              if (isWallpaperRoom(room)) return [];
+              return room.walls.map((wall, wallIndex) => (
+                <GraphPreview key={wall.id} roomName={room.category} wall={wall} wallIndex={wallIndex} />
+              ));
+            })}
           </div>
         </div>
         <div className="bill-actions">

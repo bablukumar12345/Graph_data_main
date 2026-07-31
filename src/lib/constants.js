@@ -27,6 +27,10 @@ export const PAPERS = [
   'Jointless Non Woven'
 ];
 
+export const WALLPAPER_PAPER = 'Wallpaper';
+
+export const WALLPAPER_OPTIONS = ['None', WALLPAPER_PAPER];
+
 export const GS_URL = 'https://script.google.com/macros/s/AKfycby3u-NRXPcTtcXFSUX3dNDi78ozwCuyK9vTDqmWklb65AJ3bTQO7wyNftu6LjW_HAPNxA/exec';
 
 export const makeWall = () => ({
@@ -35,12 +39,15 @@ export const makeWall = () => ({
   width: 350,
   height: 120,
   rate: 0,
-  items: []
+  items: [],
+  rollCount: '',
+  rollPrice: ''
 });
 
 export const makeRoom = () => ({
   id: makeId(),
   category: ROOM_TYPES[2],
   roomPaper: PAPERS[1],
+  wallpaperOption: 'None',
   walls: [makeWall()]
 });

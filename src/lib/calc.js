@@ -16,7 +16,17 @@ function itemSqft(item) {
   return ((Number(item.width) || 0) * (Number(item.height) || 0)) / 144;
 }
 
-export function wallSqft(wall) {
+export function isWallpaperRoom(room) {
+  return room?.wallpaperOption === 'Wallpaper';
+}
+
+export function wallRollAmount(wall) {
+  return (Number(wall.rollCount) || 0) * (Number(wall.rollPrice) || 0);
+}
+
+export function wallSqft(wall, isWallpaper) {
+  if (isWallpaper) return 0;
+
   const items = wall.items || [];
   const moldingArea = items
     .filter((item) => item.type === 'molding')
@@ -31,19 +41,21 @@ export function wallSqft(wall) {
   return Math.max(0, base - minus);
 }
 
-export function billableWallSqft(wall) {
-  return Math.round(wallSqft(wall));
+export function billableWallSqft(wall, isWallpaper) {
+  return Math.round(wallSqft(wall, isWallpaper));
 }
 
-export function wallAmount(wall) {
+export function wallAmount(wall, isWallpaper) {
+  if (isWallpaper) return wallRollAmount(wall);
   return billableWallSqft(wall) * (Number(wall.rate) || 0);
 }
 
 export function roomTotals(room) {
+  const isWallpaper = isWallpaperRoom(room);
   return (room.walls || []).reduce(
     (total, wall) => ({
-      sqft: total.sqft + billableWallSqft(wall),
-      amount: total.amount + wallAmount(wall)
+      sqft: total.sqft + billableWallSqft(wall, isWallpaper),
+      amount: total.amount + wallAmount(wall, isWallpaper)
     }),
     { sqft: 0, amount: 0 }
   );

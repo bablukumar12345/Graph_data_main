@@ -8,7 +8,9 @@ export default function BillModal({ data, onClose }) {
   const graphRef = useRef(null);
   const [busy, setBusy] = useState(false);
   const totals = quoteTotals(data.rooms);
-  const balance = totals.amount - (Number(data.advance) || 0);
+  const roundOff = Math.min(Number(data.roundOff) || 0, totals.amount);
+  const finalTotal = totals.amount - roundOff;
+  const balance = finalTotal - (Number(data.advance) || 0);
 
   async function makePdf() {
     return createPdfFile(billRef.current, 'Noida Decor.pdf', { pageSelector: '.pdf-page-section' });
@@ -141,7 +143,8 @@ export default function BillModal({ data, onClose }) {
             </table>
             <div className="bill-total">
               <span>Total Area</span><b>{formatWhole(totals.sqft)} sq ft</b>
-              <span>Grand Total</span><b>{money(totals.amount)}</b>
+              <span>Total Amount</span><b>{money(totals.amount)}</b>
+              {roundOff > 0 && <><span>Round Off / Offer</span><b>- {money(roundOff)}</b></>}
               <span>Advance Paid</span><b>{money(data.advance)}</b>
               <span>{balance < 0 ? 'Overpaid' : 'Balance Due'}</span><b>{money(Math.abs(balance))}</b>
             </div>
@@ -171,5 +174,3 @@ export default function BillModal({ data, onClose }) {
     </div>
   );
 }
-
-

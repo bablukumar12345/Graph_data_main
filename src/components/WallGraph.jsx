@@ -6,10 +6,10 @@ import { formatMax2, formatWhole } from '../lib/calc';
 const DEFAULTS = {
   door: { type: 'door', label: 'Door', width: 36, height: 84, x: 24, y: 0 },
   window: { type: 'window', label: 'Window', width: 48, height: 36, x: 120, y: 24 },
-  ac: { type: 'ac', label: 'AC', width: 36, height: 18, x: 180, y: 12 },
+  ac: { type: 'ac', label: 'AC', width: 34, height: 12, x: 90, y: 12 },
   sofa: { type: 'sofa', label: 'Sofa', width: 84, height: 36, x: 80, y: 0 },
   bed: { type: 'bed', label: 'Bed', width: 78, height: 72, x: 130, y: 48 },
-  molding: { type: 'molding', label: 'Wall 1', width: 60, height: 18, x: 40, y: 36 }
+  molding: { type: 'molding', label: 'Wall 1', width: 18, height: 60, x: 40, y: 36 }
 };
 
 const colors = {
@@ -303,7 +303,6 @@ export default function WallGraph({ wall, onChange }) {
     </div>
   );
 }
-
 
 
 

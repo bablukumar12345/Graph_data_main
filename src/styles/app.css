@@ -177,7 +177,8 @@ input:focus {
 .room-head {
   position: relative;
   padding: 18px;
-  background: var(--navy);
+  background: rgb(58, 58, 15); 
+  /* background: var(--navy); */
 }
 
 .room-section-label {
@@ -473,7 +474,8 @@ input:focus {
 }
 
 .graph-item.molding .item-title {
-  transform: rotate(-90deg);
+  /* Keep Wall labels readable when a molding is taller than it is wide. */
+  transform: none;
   white-space: nowrap;
 }
 
@@ -906,6 +908,28 @@ input:focus {
   padding: 0;
 }
 
+.history-lock-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 18px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.history-lock-trigger span {
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
 .history-dropdown summary {
   cursor: pointer;
   list-style: none;
@@ -960,6 +984,38 @@ input:focus {
   color: var(--text);
   font-weight: 700;
   line-height: 1.5;
+}
+
+.pin-panel h2 {
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 20px;
+}
+
+.pin-panel label {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.pin-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 11px 12px;
+  font: inherit;
+  letter-spacing: .2em;
+}
+
+.pin-error {
+  display: block;
+  margin: 0 0 12px;
+  color: var(--red);
+  font-weight: 700;
 }
 
 .confirm-panel div {

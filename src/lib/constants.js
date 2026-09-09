@@ -5,10 +5,13 @@ export const ROOM_TYPES = [
   'Bedroom',
   'Master Bedroom',
   'Children Room',
+  'Main Room',
   'Mandir Area',
   'Dining Area',
   'Study Room',
-  'Guest Room'
+  'Guest Room',
+  'Stairs Area',
+  'Lobby'
 ];
 
 export const PAPERS = [
@@ -18,13 +21,14 @@ export const PAPERS = [
   'Premium Stroke',
   'Canvas Paper',
   'Canvas Fabric',
+  'Canvas Fabric (Jointless)',
   'Premium Non Woven',
   'PVC Paper',
   'HD Paper',
   'Leather Texture',
   'Ivory Weave',
   'Embossed Non Woven',
-  'Jointless Non Woven'
+  'Non Woven (Jointless)'
 ];
 
 export const WALLPAPER_PAPER = 'Wallpaper';

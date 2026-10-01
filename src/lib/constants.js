@@ -1,6 +1,7 @@
 import { makeId } from './id';
 
 export const ROOM_TYPES = [
+  'Custom Room',
   'Living Room',
   'Bedroom',
   'Master Bedroom',
@@ -14,7 +15,14 @@ export const ROOM_TYPES = [
   'Lobby'
 ];
 
+export const CUSTOM_ROOM = 'Custom Room';
+
+export const roomName = (room) => (
+  room?.category === CUSTOM_ROOM ? room.customName?.trim() || CUSTOM_ROOM : room?.category
+);
+
 export const PAPERS = [
+  'Custom Paper Quality',
   'Non Woven',
   'Matt Lamination',
   'Premium Glitter',
@@ -30,6 +38,12 @@ export const PAPERS = [
   'Embossed Non Woven',
   'Non Woven (Jointless)'
 ];
+
+export const CUSTOM_PAPER = 'Custom Paper Quality';
+
+export const paperName = (room) => (
+  room?.roomPaper === CUSTOM_PAPER ? room.customPaperName?.trim() || CUSTOM_PAPER : room?.roomPaper
+);
 
 export const WALLPAPER_PAPER = 'Wallpaper';
 
@@ -51,7 +65,9 @@ export const makeWall = () => ({
 export const makeRoom = () => ({
   id: makeId(),
   category: ROOM_TYPES[2],
+  customName: '',
   roomPaper: PAPERS[1],
+  customPaperName: '',
   wallpaperOption: 'None',
   walls: [makeWall()]
 });

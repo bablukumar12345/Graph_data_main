@@ -82,7 +82,7 @@ header {
 }
 
 .brand img {
-  width: 44px;
+  width: 65px;
   height: 44px;
   border-radius: 10px;
   object-fit: cover;
@@ -199,6 +199,32 @@ input:focus {
   grid-template-columns: 38px minmax(0, 1fr);
   gap: 10px;
   max-width: 440px;
+}
+
+.custom-room-name {
+  display: grid;
+  gap: 6px;
+  max-width: 440px;
+  margin: 12px 0 0 48px;
+  color: rgb(255 255 255 / 70%);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+
+.custom-room-name input {
+  min-height: 38px;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 7px;
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+  padding: 8px 11px;
+  font: inherit;
+  letter-spacing: normal;
+}
+
+.custom-room-name input::placeholder {
+  color: rgb(255 255 255 / 55%);
 }
 
 .room-num {

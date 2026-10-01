@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown } from 'primereact/dropdown';
-import { PAPERS, ROOM_TYPES, WALLPAPER_OPTIONS, makeWall } from '../lib/constants';
+import { CUSTOM_PAPER, CUSTOM_ROOM, PAPERS, ROOM_TYPES, WALLPAPER_OPTIONS, makeWall } from '../lib/constants';
 import { formatWhole, isWallpaperRoom, money, roomTotals, wallAmount, wallSqft } from '../lib/calc';
 import WallGraph from './WallGraph.jsx';
 import { cleanNumericInput } from '../lib/numberInput';
@@ -23,7 +23,6 @@ export default function RoomCard({ room, index, onChange, canDelete = false, onD
   }
 
   function deleteWall(id) {
-    if (walls.length <= 1) return;
     updateRoom({ walls: walls.filter((wall) => wall.id !== id) });
   }
 
@@ -38,11 +37,33 @@ export default function RoomCard({ room, index, onChange, canDelete = false, onD
           <div className="room-num">{index + 1}</div>
           <Dropdown value={room.category} options={ROOM_TYPES} onChange={(e) => updateRoom({ category: e.value })} className="prime-dropdown" />
         </div>
+        {room.category === CUSTOM_ROOM && (
+          <label className="custom-room-name">
+            Custom room name
+            <input
+              type="text"
+              value={room.customName || ''}
+              placeholder="Enter room name"
+              onChange={(e) => updateRoom({ customName: e.target.value })}
+            />
+          </label>
+        )}
         <div className="room-section-label paper-label">Paper Quality</div>
         <div className="room-select-row paper-select-row">
           <div className="room-num">2</div>
           <Dropdown value={room.roomPaper} options={PAPERS} onChange={(e) => updateRoom({ roomPaper: e.value })} className="prime-dropdown paper-dropdown" />
         </div>
+        {room.roomPaper === CUSTOM_PAPER && (
+          <label className="custom-room-name">
+            Custom paper quality
+            <input
+              type="text"
+              value={room.customPaperName || ''}
+              placeholder="Enter paper quality"
+              onChange={(e) => updateRoom({ customPaperName: e.target.value })}
+            />
+          </label>
+        )}
         <div className="room-section-label paper-label">Wallpaper</div>
         <div className="room-select-row paper-select-row">
           <div className="room-num">3</div>
@@ -62,7 +83,7 @@ export default function RoomCard({ room, index, onChange, canDelete = false, onD
               <div className="wall-badge">Wall {wallIndex + 1}</div>
               <div className="wall-title-actions">
                 <button className="add-wall-inline" type="button" onClick={addWall}>+ Add Wall</button>
-                {wallIndex > 0 && <button className="wall-delete" type="button" onClick={() => deleteWall(wall.id)}>x</button>}
+                <button className="wall-delete" type="button" onClick={() => deleteWall(wall.id)}>x</button>
               </div>
             </div>
             <label className="pattern-field">Pattern Number<input type="text" placeholder="e.g. WP-2024" value={wall.patternNum} onChange={(e) => updateWall(wall.id, { ...wall, patternNum: e.target.value })} /></label>
@@ -125,5 +146,3 @@ export default function RoomCard({ room, index, onChange, canDelete = false, onD
     </section>
   );
 }
-
-

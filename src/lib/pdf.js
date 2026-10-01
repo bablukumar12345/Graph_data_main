@@ -17,7 +17,7 @@ async function waitForImages(element) {
   ]);
 }
 
-export async function createPdfFile(element, fileName = 'Noida Decor.pdf', options = {}) {
+export async function createPdfFile(element, fileName = 'Odo Walls.pdf', options = {}) {
   const scale = options.scale || 3;
   const pageSelector = options.pageSelector;
   await waitForImages(element);

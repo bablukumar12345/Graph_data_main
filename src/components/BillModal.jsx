@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { formatWhole, isWallpaperRoom, money, quoteTotals, wallAmount, wallSqft } from '../lib/calc';
 import { createPdfFile, downloadFile } from '../lib/pdf';
 import GraphPreview from './GraphPreview.jsx';
+import { paperName, roomName } from '../lib/constants';
 
 export default function BillModal({ data, onClose }) {
   const billRef = useRef(null);
@@ -13,19 +14,19 @@ export default function BillModal({ data, onClose }) {
   const balance = finalTotal - (Number(data.advance) || 0);
 
   async function makePdf() {
-    return createPdfFile(billRef.current, 'Noida Decor.pdf', { pageSelector: '.pdf-page-section' });
+    return createPdfFile(billRef.current, 'Odo Walls.pdf', { pageSelector: '.pdf-page-section' });
   }
 
   async function makeSharePdf() {
-    return createPdfFile(billRef.current, 'Noida Decor.pdf', { scale: 2, pageSelector: '.pdf-page-section' });
+    return createPdfFile(billRef.current, 'Odo Walls.pdf', { scale: 2, pageSelector: '.pdf-page-section' });
   }
 
   async function makeShareGraphPdf() {
-    return createPdfFile(graphRef.current, 'Noida Decor Graph.pdf', { scale: 2, pageSelector: '.bill-graph-card' });
+    return createPdfFile(graphRef.current, 'Odo Walls Graph.pdf', { scale: 2, pageSelector: '.bill-graph-card' });
   }
 
   async function makeGraphPdf() {
-    return createPdfFile(graphRef.current, 'Noida Decor Graph.pdf', { pageSelector: '.bill-graph-card' });
+    return createPdfFile(graphRef.current, 'Odo Walls Graph.pdf', { pageSelector: '.bill-graph-card' });
   }
 
   async function downloadPdf() {
@@ -54,7 +55,7 @@ export default function BillModal({ data, onClose }) {
   }
 
   function openWhatsAppShare(fileName) {
-    const message = `Noida Decor PDF is ready: ${fileName}`;
+    const message = `Odo Walls PDF is ready: ${fileName}`;
     const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   }
@@ -64,7 +65,7 @@ export default function BillModal({ data, onClose }) {
       try {
         await navigator.share({
           files: [file],
-          title: 'Noida Decor',
+          title: 'Odo Walls',
         });
         return;
       } catch (err) {
@@ -109,8 +110,8 @@ export default function BillModal({ data, onClose }) {
           <div className="pdf-page-section">
             <div className="bill-header">
               <div className="bill-brand">
-                <img src="/img/logo.png" alt="Noida Decor" />
-                <div><strong>Noida Decor</strong><small>Vivek Choudhary</small></div>
+                <img src="/img/logo456.png" alt="Odo Walls" />
+                <div><strong>Odo Walls</strong><small>Vivek Choudhary</small></div>
               </div>
               <div className="bill-meta">
                 Date: <b>{new Date().toLocaleDateString('en-IN')}</b><br />
@@ -128,9 +129,9 @@ export default function BillModal({ data, onClose }) {
                   const isWallpaper = isWallpaperRoom(room);
                   return room.walls.map((wall, wallIndex) => (
                     <tr key={wall.id}>
-                      <td>{room.category}</td>
+                      <td>{roomName(room)}</td>
                       <td>Wall {wallIndex + 1}</td>
-                      <td>{isWallpaper ? 'Wallpaper' : room.roomPaper}</td>
+                      <td>{isWallpaper ? 'Wallpaper' : paperName(room)}</td>
                       <td>{wall.patternNum || 'NA'}</td>
                       <td>{isWallpaper ? 'NA' : formatWhole(wallSqft(wall, false))}</td>
                       <td>{isWallpaper ? 'NA' : money(wall.rate)}</td>
@@ -153,7 +154,7 @@ export default function BillModal({ data, onClose }) {
             {data.rooms.flatMap((room) => {
               if (isWallpaperRoom(room)) return [];
               return room.walls.map((wall, wallIndex) => (
-                <GraphPreview key={wall.id} roomName={room.category} wall={wall} wallIndex={wallIndex} />
+                <GraphPreview key={wall.id} roomName={roomName(room)} wall={wall} wallIndex={wallIndex} />
               ));
             })}
           </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import RoomCard from './components/RoomCard.jsx';
 import BillModal from './components/BillModal.jsx';
-import { makeRoom, makeWall } from './lib/constants';
+import { makeRoom, makeWall, roomName } from './lib/constants';
 import { money, quoteTotals } from './lib/calc';
 import {
   clearDraftId,
@@ -277,8 +277,8 @@ export default function App() {
       {notice && <div className="toast">{notice}</div>}
       <header>
         <div className="brand">
-          <img src="/img/logo.png" alt="Noida Decor" />
-          <strong>Noida Decor</strong>
+          <img src="/img/logo456.png" alt="Odo Walls" />
+          <strong>Odo Walls</strong>
         </div>
         <span>{new Date().toLocaleDateString('en-IN')}</span>
       </header>
@@ -310,7 +310,7 @@ export default function App() {
           <h2>Bill Summary</h2>
           {quote.rooms.map((room) => {
             const rt = quoteTotals([room]);
-            return <div className="summary-room" key={room.id}><span>{room.category} - {Math.trunc(rt.sqft)} sq ft</span><b>{money(rt.amount)}</b></div>;
+            return <div className="summary-room" key={room.id}><span>{roomName(room)} - {Math.trunc(rt.sqft)} sq ft</span><b>{money(rt.amount)}</b></div>;
           })}
           <div className="summary-total"><span>Total Area</span><b>{Math.trunc(totals.sqft)} sq ft</b></div>
           <div className="summary-total"><span>Total Amount</span><b>{money(totals.amount)}</b></div>

@@ -65,7 +65,7 @@ export default function GraphPreview({ roomName, wall, wallIndex }) {
       <strong>{roomName} - Wall {wallIndex + 1}</strong>
       <div className="bill-stage-wrap">
         <div className="bill-wall-stage" style={{ aspectRatio: `${wallWidth} / ${wallHeight}` }}>
-          <div className="graph-watermark">NOIDA DECOR</div>
+          <div className="graph-watermark">ODO WALLS</div>
           <div className="wall-total bill-wall-total width"><span>Width {formatWhole(wallWidth)} inch</span></div>
           <div className="wall-total bill-wall-total height"><span>Height {formatWhole(wallHeight)} inch</span></div>
           {items.map((item) => {
